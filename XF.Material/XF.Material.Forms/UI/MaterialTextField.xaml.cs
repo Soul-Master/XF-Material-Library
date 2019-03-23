@@ -863,7 +863,7 @@ namespace XF.Material.Forms.UI
 
         private void Entry_SizeChanged(object sender, EventArgs e)
         {
-            var baseHeight = this.FloatingPlaceholderEnabled ? 56 : 40;
+            var baseHeight = this.FloatingPlaceholderEnabled ? 50 : 34;
             var diff = entry.Height - 20;
             var rawRowHeight = baseHeight + diff;
             _autoSizingRow.Height = new GridLength(rawRowHeight);
