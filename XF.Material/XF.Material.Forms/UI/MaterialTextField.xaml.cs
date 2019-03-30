@@ -1068,7 +1068,7 @@ namespace XF.Material.Forms.UI
                     break;
 
                 case MaterialTextFieldInputType.Password:
-                    entry.Keyboard = Keyboard.Text;
+                    entry.Keyboard = Keyboard.Create(KeyboardFlags.None);
                     break;
 
                 case MaterialTextFieldInputType.Choice:
