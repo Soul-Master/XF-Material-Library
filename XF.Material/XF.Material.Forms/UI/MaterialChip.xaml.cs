@@ -11,6 +11,8 @@ namespace XF.Material.Forms.UI
     {
         public static readonly BindableProperty ActionImageProperty = BindableProperty.Create(nameof(ActionImage), typeof(ImageSource), typeof(MaterialChip), default(ImageSource));
         public static readonly BindableProperty ActionImageTappedCommandProperty = BindableProperty.Create(nameof(ActionImageTappedCommand), typeof(ICommand), typeof(MaterialChip), default(Command));
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(MaterialChip), default(Command));
+        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(MaterialChip), default(object));
         public static readonly BindableProperty ActionImageTintColorProperty = BindableProperty.Create(nameof(ActionImageTintColor), typeof(Color), typeof(MaterialChip), default(Color));
         public new static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(MaterialChip), default(Color));
         public static readonly BindableProperty FontFamilyProperty = BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(MaterialChip), default(string));
@@ -38,6 +40,18 @@ namespace XF.Material.Forms.UI
         {
             get => (Command)this.GetValue(ActionImageTappedCommandProperty);
             set => this.SetValue(ActionImageTappedCommandProperty, value);
+        }
+
+        public Command Command
+        {
+            get => (Command)this.GetValue(CommandProperty);
+            set => this.SetValue(CommandProperty, value);
+        }
+
+        public object CommandParameter
+        {
+            get => (object)this.GetValue(CommandParameterProperty);
+            set => this.SetValue(CommandParameterProperty, value);
         }
 
         public Color ActionImageTintColor
@@ -127,6 +141,18 @@ namespace XF.Material.Forms.UI
                             ChipActionImage.GestureRecognizers.Clear();
                         }
 
+                        break;
+                    }
+                    case nameof(this.Command):
+                    {
+                        if (this.Command != null && ChipContainer.GestureRecognizers.Count <= 0)
+                        {
+                            ChipContainer.GestureRecognizers.Add(new TapGestureRecognizer { Command = Command, CommandParameter = CommandParameter });
+                        }
+                        else if (this.Command == null)
+                        {
+                            ChipActionImage.GestureRecognizers.Clear();
+                        }
                         break;
                     }
                 }
