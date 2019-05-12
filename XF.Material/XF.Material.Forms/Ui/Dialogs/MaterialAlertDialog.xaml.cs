@@ -39,8 +39,13 @@ namespace XF.Material.Forms.UI.Dialogs
 
         internal static async Task AlertAsync(string message, string title = null, MaterialAlertDialogConfiguration configuration = null)
         {
-            var dialog = new MaterialAlertDialog(message, title, "Ok", null, configuration: configuration);
+            var dialog = new MaterialAlertDialog(message, title, "ตกลง", null, configuration: configuration)
+            {
+                InputTaskCompletionSource = new TaskCompletionSource<bool?>()
+            };
             await dialog.ShowAsync();
+
+            await dialog.InputTaskCompletionSource.Task;
         }
 
         internal static async Task AlertAsync(string message, string title, string acknowledgementText = "Ok", MaterialAlertDialogConfiguration configuration = null)
