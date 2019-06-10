@@ -1195,7 +1195,7 @@ namespace XF.Material.Forms.UI
             if (this.InputType == MaterialTextFieldInputType.Choice && !string.IsNullOrEmpty(text))
             {
                 var selectedChoice = this.GetSelectedChoice(_selectedIndex);
-                this.ChoiceSelected?.Invoke(this, new SelectedItemChangedEventArgs(selectedChoice));
+                this.ChoiceSelected?.Invoke(this, new SelectedItemChangedEventArgs(selectedChoice, _selectedIndex));
                 this.ChoiceSelectedCommand?.Execute(selectedChoice);
             }
             else if (this.InputType == MaterialTextFieldInputType.Choice && string.IsNullOrEmpty(text))
