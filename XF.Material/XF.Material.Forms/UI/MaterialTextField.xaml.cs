@@ -802,12 +802,15 @@ namespace XF.Material.Forms.UI
                 var accentColor = this.TintColor;
                 placeholder.TextColor = accentColor;
                 counter.TextColor = this.HelperTextColor;
-                underline.Color = accentColor;
-                persistentUnderline.Color = this.UnderlineColor;
+                underline.Color = this.ShouldAnimateUnderline ? this.TintColor : Color.Transparent;
+                persistentUnderline.Color = this.AlwaysShowUnderline ? this.TintColor : Color.Transparent;
+                underline.WidthRequest = -1;
+                underline.HorizontalOptions = LayoutOptions.FillAndExpand;
 
                 if (string.IsNullOrEmpty(this.ErrorText))
                 {
                     helper.TextColor = this.HelperTextColor;
+                    helper.Text = this.HelperText;
                 }
                 else
                 {
