@@ -31,10 +31,10 @@
     <EmbeddedResource Remove="UI\Internals\MaterialInputDialogTextField.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie" Version="3.0.0" />
-    <PackageReference Include="Rg.Plugins.Popup" Version="1.1.5.188" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
-    <PackageReference Include="Xamarin.Forms" Version="4.1.0.618606" />
+    <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie" Version="3.0.3" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="1.2.0.223" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
+    <PackageReference Include="Xamarin.Forms" Version="4.4.0.991640" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="UI\Dialogs\MaterialAlertDialog.xaml.cs">
