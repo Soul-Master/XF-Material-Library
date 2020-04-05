@@ -11,7 +11,8 @@ namespace XF.Material.Forms.UI
     {
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(MaterialChip), default(Command));
         public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(MaterialChip), default(object));        
-        public new static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(MaterialChip), default(Color));        
+        public new static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(MaterialChip), default(Color));
+        public static readonly BindableProperty BorderColorProperty = BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(MaterialChip), Color.FromHex("#C4C4C400"));
         public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(MaterialChip), Color.FromHex("#DE000000"));
         public static readonly BindableProperty TextProperty = BindableProperty.Create(nameof(Text), typeof(string), typeof(MaterialChip), string.Empty);
         public static readonly BindableProperty BadgeProperty = BindableProperty.Create(nameof(Badge), typeof(string), typeof(MaterialChip), string.Empty);
@@ -37,6 +38,12 @@ namespace XF.Material.Forms.UI
         {
             get => (Color)this.GetValue(BackgroundColorProperty);
             set => this.SetValue(BackgroundColorProperty, value);
+        }
+
+        public Color BorderColor
+        {
+            get => (Color)this.GetValue(BorderColorProperty);
+            set => this.SetValue(BorderColorProperty, value);
         }
 
         public string Text
@@ -86,6 +93,9 @@ namespace XF.Material.Forms.UI
                             BadgeLabel.Text = string.Empty;
                             BadgeContainer.IsVisible = false;
                         }
+                        break;
+                    case nameof(this.BorderColor):
+                        ChipContainer.BorderColor = this.BorderColor;
                         break;
                     case nameof(this.Command):
                     {
