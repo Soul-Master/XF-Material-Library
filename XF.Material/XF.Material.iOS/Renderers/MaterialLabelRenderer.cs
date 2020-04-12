@@ -1,7 +1,7 @@
-﻿using CoreGraphics;
-using Foundation;
-using System;
+﻿using System;
 using System.ComponentModel;
+using CoreGraphics;
+using Foundation;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -16,23 +16,64 @@ namespace XF.Material.iOS.Renderers
     {
         public new MaterialLabel Element => base.Element as MaterialLabel;
 
+        public NSMutableAttributedString AttributedString => Control?.AttributedText as NSMutableAttributedString;
+
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();
 
-            if (this.Control == null || this.Control.Frame.Size.Height == 0)
+            CheckIfSingleLine();
+            UpdateLetterSpacing(Control, Element.LetterSpacing);
+            EnsureLineBreakMode();
+        }
+
+        private void CheckIfSingleLine()
+        {
+            if (Control == null || Control.Frame.Size.Height == 0)
             {
                 return;
             }
 
-            var textSize = new CGSize(this.Control.Frame.Size.Width, nfloat.MaxValue);
-            var rHeight = this.Control.SizeThatFits(textSize).Height;
-            var charSize = this.Control.Font.LineHeight;
+            var textSize = new CGSize(Control.Frame.Size.Width, nfloat.MaxValue);
+            var rHeight = Control.SizeThatFits(textSize).Height;
+            var charSize = Control.Font.LineHeight;
             var lines = Convert.ToInt32(rHeight / charSize);
 
             if (lines == 1)
             {
-                this.OnLineHeightChanged(this.Control, 0);
+                Element.LineHeight = 1;
+            }
+        }
+        private void EnsureLineBreakMode()
+        {
+            if (Element == null || Control == null)
+            {
+                return;
+            }
+
+            var lbm = Element.LineBreakMode;
+            switch (lbm)
+            {
+                case Xamarin.Forms.LineBreakMode.NoWrap:
+                    Control.LineBreakMode = UIKit.UILineBreakMode.Clip;
+                    break;
+                case Xamarin.Forms.LineBreakMode.WordWrap:
+                    Control.LineBreakMode = UIKit.UILineBreakMode.WordWrap;
+                    break;
+                case Xamarin.Forms.LineBreakMode.CharacterWrap:
+                    Control.LineBreakMode = UIKit.UILineBreakMode.CharacterWrap;
+                    break;
+                case Xamarin.Forms.LineBreakMode.HeadTruncation:
+                    Control.LineBreakMode = UIKit.UILineBreakMode.HeadTruncation;
+                    break;
+                case Xamarin.Forms.LineBreakMode.TailTruncation:
+                    Control.LineBreakMode = UIKit.UILineBreakMode.TailTruncation;
+                    break;
+                case Xamarin.Forms.LineBreakMode.MiddleTruncation:
+                    Control.LineBreakMode = UIKit.UILineBreakMode.MiddleTruncation;
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -40,9 +81,11 @@ namespace XF.Material.iOS.Renderers
         {
             base.OnElementChanged(e);
 
-            if (e?.NewElement == null) return;
-            OnLetterSpacingChanged(this.Control, this.Element.LetterSpacing);
-            this.OnLineHeightChanged(this.Control, this.Element.LineHeight);
+            if (e?.NewElement != null)
+            {
+                UpdateLetterSpacing(Control, Element.LetterSpacing);
+                EnsureLineBreakMode();
+            }
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -52,44 +95,26 @@ namespace XF.Material.iOS.Renderers
             switch (e?.PropertyName)
             {
                 case nameof(MaterialLabel.LetterSpacing):
-                    OnLetterSpacingChanged(this.Control, this.Element.LetterSpacing);
-                    break;
-                case nameof(MaterialLabel.LineHeight):
-                    this.OnLineHeightChanged(this.Control, this.Element.LineHeight);
+                case nameof(Label.Text):
+                    UpdateLetterSpacing(Control, Element.LetterSpacing);
+                    CheckIfSingleLine();
+                    EnsureLineBreakMode();
                     break;
             }
         }
 
-        private static void OnLetterSpacingChanged(UILabel uiLabel, double letterSpacing)
+        private void UpdateLetterSpacing(UILabel uiLabel, double letterSpacing)
         {
-            var attributedString = (NSMutableAttributedString) uiLabel?.AttributedText;
-
-            if (attributedString == null) return;
-            var nsKern = new NSString("NSKern");
-            var nsObject = FromObject(letterSpacing);
-            var nsRange = new NSRange(0, uiLabel.Text?.Length ?? 0);
-
-            attributedString.AddAttribute(nsKern, nsObject, nsRange);
-        }
-
-        private void OnLineHeightChanged(UILabel uiLabel, double lineSpacing)
-        {
-            var attributedString = (NSMutableAttributedString) uiLabel?.AttributedText;
-
-            if (attributedString == null) return;
-            var attributeRange = new NSRange(0, uiLabel.Text.Length);
-            var pAttribute = new NSMutableParagraphStyle();
-
-            if (Math.Abs(lineSpacing) < float.MinValue)
+            if (uiLabel == null || AttributedString == null)
             {
-                pAttribute.LineSpacing = 0;
-            }
-            else
-            {
-                pAttribute.LineSpacing = (nfloat)((this.Element.FontSize * lineSpacing) - this.Element.FontSize);
+                return;
             }
 
-            attributedString.SetAttributes(new NSDictionary<NSString, NSObject>(UIStringAttributeKey.ParagraphStyle, pAttribute), attributeRange);
+            var range = new NSRange(0, uiLabel.Text?.Length ?? 0);
+            var attr = new NSMutableAttributedString(Control.AttributedText);
+            attr.AddAttribute(UIStringAttributeKey.KerningAdjustment, FromObject((float)letterSpacing), range);
+
+            Control.AttributedText = attr;
         }
     }
 }

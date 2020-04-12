@@ -115,27 +115,6 @@ namespace XF.Material.Forms.UI.Dialogs
             return (int)await MaterialConfirmationDialog.ShowSelectChoiceAsync(title, choices, selectedIndex, confirmingText, dismissiveText, configuration);
         }
 
-        public async Task<int[]> SelectChoicesAsync(
-            string title,
-            IList<string> choices,
-            string confirmingText = "Ok",
-            string dismissiveText = "Cancel",
-            MaterialConfirmationDialogConfiguration configuration = null)
-        {
-            return (int[])await MaterialConfirmationDialog.ShowSelectChoicesAsync(title, choices, confirmingText, dismissiveText, configuration);
-        }
-
-        public async Task<int[]> SelectChoicesAsync(
-            string title,
-            IList<string> choices,
-            IList<int> selectedIndices,
-            string confirmingText = "Ok",
-            string dismissiveText = "Cancel",
-            MaterialConfirmationDialogConfiguration configuration = null)
-        {
-            return (int[])await MaterialConfirmationDialog.ShowSelectChoicesAsync(title, choices, selectedIndices, confirmingText, dismissiveText, configuration);
-        }
-
         public void SetGlobalStyles(
             MaterialAlertDialogConfiguration dialogConfiguration = null,
             MaterialLoadingDialogConfiguration loadingDialogConfiguration = null,

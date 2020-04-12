@@ -104,10 +104,13 @@ namespace XF.Material.Forms.UI
             base.OnPropertyChanged(propertyName);
 
             if (propertyName != nameof(this.SelectedIndex)) return;
-            if (this.SelectedIndex >= 0 && this.Models?.Any() == true)
+
+            if (Models?.Any() == true)
             {
-                var model = this.Models[this.SelectedIndex];
-                model.IsSelected = true;
+                for (var i = 0; i < Models.Count; i++)
+                {
+                    Models[i].IsSelected = i == SelectedIndex;
+                }
             }
 
             this.OnSelectedIndexChanged(this.SelectedIndex);

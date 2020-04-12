@@ -1170,6 +1170,15 @@ namespace XF.Material.Forms.UI
             var configuration = MaterialConfirmationDialog.GetDialogConfiguration(this);
             int result;
 
+            for (var i = 0; i < _choices.Count; i++)
+            {
+                if (_choices[i] == this.Text)
+                {
+                    _selectedIndex = i;
+                    break;
+                }
+            }
+
             if (_selectedIndex >= 0)
             {
                 result = await MaterialDialog.Instance.SelectChoiceAsync(title, _choices, _selectedIndex, confirmingText, dismissiveText, configuration);

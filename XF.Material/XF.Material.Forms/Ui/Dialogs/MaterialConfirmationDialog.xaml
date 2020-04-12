@@ -22,8 +22,6 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="1" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="1" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <material:MaterialLabel x:Name="DialogTitle"
                                         Grid.Row="0"
@@ -54,44 +52,6 @@
                         </DataTrigger>
                     </View.Triggers>
                 </ScrollView>
-                <BoxView Grid.Row="3"
-                         BackgroundColor="#E0E0E0" />
-                <Grid Grid.Row="4"
-                      Margin="0,0,8,0"
-                      ColumnSpacing="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="52" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <material:MaterialButton x:Name="NegativeButton"
-                                             Grid.Column="2"
-                                             Margin="0,0,-8,0"
-                                             ButtonType="Text"
-                                             Text="Cancel"
-                                             VerticalOptions="Center">
-                        <material:MaterialButton.Triggers>
-                            <Trigger TargetType="Button" Property="Text" Value="{x:Null}">
-                                <Setter Property="IsVisible" Value="False" />
-                                <Setter Property="IsEnabled" Value="False" />
-                            </Trigger>
-                            <Trigger TargetType="Button" Property="Text" Value="{x:Static sys:String.Empty}">
-                                <Setter Property="IsVisible" Value="False" />
-                                <Setter Property="IsEnabled" Value="False" />
-                            </Trigger>
-                        </material:MaterialButton.Triggers>
-                    </material:MaterialButton>
-                    <material:MaterialButton x:Name="PositiveButton"
-                                             Grid.Column="3"
-                                             ButtonType="Text"
-                                             IsEnabled="False"
-                                             Text="Ok"
-                                             VerticalOptions="Center" />
-                </Grid>
             </Grid>
         </material:MaterialCard>
     </ContentPage.Content>
