@@ -22,6 +22,16 @@ namespace XF.Material.Forms.UI
         public static readonly BindableProperty ClickCommandProperty = BindableProperty.Create(nameof(ClickCommand), typeof(ICommand), typeof(MaterialCard));
 
         /// <summary>
+        /// Backing field for the bindable property <see cref="LongPressCommandParameter"/>.
+        /// </summary>
+        public static readonly BindableProperty LongPressCommandParameterProperty = BindableProperty.Create(nameof(LongPressCommandParameter), typeof(object), typeof(MaterialCard));
+
+        /// <summary>
+        /// Backing field for the bindable property <see cref="LongPressCommand"/>.
+        /// </summary>
+        public static readonly BindableProperty LongPressCommandProperty = BindableProperty.Create(nameof(LongPressCommand), typeof(ICommand), typeof(MaterialCard));
+
+        /// <summary>
         /// Backing field for the bindable property <see cref="Elevation"/>.
         /// </summary>
         public static readonly BindableProperty ElevationProperty = BindableProperty.Create(nameof(Elevation), typeof(int), typeof(MaterialCard), 1);
@@ -65,6 +75,24 @@ namespace XF.Material.Forms.UI
         }
 
         /// <summary>
+        /// When the property <see cref="IsClickable"/> is set to true, this command will be executed when this card was long pressed.
+        /// </summary>
+        public ICommand LongPressCommand
+        {
+            get => (ICommand)this.GetValue(LongPressCommandProperty);
+            set => this.SetValue(LongPressCommandProperty, value);
+        }
+
+        /// <summary>
+        /// The parameter to pass when <see cref="LongPressCommand"/> executes.
+        /// </summary>
+        public object LongPressCommandParameter
+        {
+            get => this.GetValue(LongPressCommandParameterProperty);
+            set => this.SetValue(LongPressCommandParameterProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the virtual distance along the z-axis for emphasis.
         /// </summary>
         public int Elevation
@@ -84,8 +112,7 @@ namespace XF.Material.Forms.UI
 
         protected virtual void OnClick()
         {
-            this.Clicked?.Invoke(this, EventArgs.Empty);
-            this.ClickCommand?.Execute(this.ClickCommandParameter);
+
         }
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -109,17 +136,27 @@ namespace XF.Material.Forms.UI
             {
                 if (_tapGestureRecognizer == null)
                 {
-                    _tapGestureRecognizer = new TapGestureRecognizer
-                    {
-                        Command = new Command(this.OnClick)
-                    };
+                    _tapGestureRecognizer = new TapGestureRecognizer();
                 }
 
                 this.GestureRecognizers.Add(_tapGestureRecognizer);
+
+                //if (_longPressedEffect == null)
+                //{
+                //    _longPressedEffect = new LongPressedEffect();
+
+                //    this.Effects.Add(_longPressedEffect);
+                //    LongPressedEffect.SetCommand(this, this.LongPressCommand);
+                //    LongPressedEffect.SetCommandParameter(this, this.LongPressCommandParameter);
+                //}
             }
             else
             {
                 this.GestureRecognizers.Remove(_tapGestureRecognizer);
+
+                //this.Effects.Remove(_longPressedEffect);
+                //LongPressedEffect.SetCommand(this, null);
+                //LongPressedEffect.SetCommandParameter(this, null);
             }
         }
     }

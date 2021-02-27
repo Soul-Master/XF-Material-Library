@@ -18,6 +18,9 @@ namespace XF.Material.Droid.Renderers
     public class MaterialCardRenderer : Xamarin.Forms.Platform.Android.AppCompat.FrameRenderer, IOnTouchListener
     {
         private MaterialCard _materialCard;
+        private bool _isLongPress = false;
+
+        const int longPressDuration = 500;
 
         public MaterialCardRenderer(Context context) : base(context)
         {
@@ -26,13 +29,30 @@ namespace XF.Material.Droid.Renderers
         public bool OnTouch(Android.Views.View v, MotionEvent e)
         {
             if (_materialCard.GestureRecognizers.Count <= 0 || this.Control.Foreground == null) return false;
+
             switch (e.Action)
             {
                 case MotionEventActions.Down:
                     this.Control.Foreground.SetHotspot(e.GetX(), e.GetY());
                     this.Control.Pressed = true;
+                    _isLongPress = false;
+                    break;
+                case MotionEventActions.Move:
+                    if (!_isLongPress && _materialCard.LongPressCommand != null && e.EventTime - e.DownTime > longPressDuration)
+                    {
+                        _isLongPress = true;
+                        this.Control.Pressed = false;
+                        _materialCard.LongPressCommand.Execute(_materialCard.LongPressCommandParameter);
+                    }
                     break;
                 case MotionEventActions.Up:
+                    this.Control.Pressed = false;
+
+                    if (!_isLongPress && _materialCard.ClickCommand != null)
+                    {
+                        _materialCard.ClickCommand.Execute(_materialCard.ClickCommandParameter);
+                    }
+                    break;
                 case MotionEventActions.Cancel:
                 case MotionEventActions.Outside:
                     this.Control.Pressed = false;
